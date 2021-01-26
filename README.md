@@ -1,5 +1,6 @@
 # datascience_porfolio
-This Repo is the Data Science Porfolio that I have learnt in Semester-7 and using R programming language
+- This Repo is the Data Science Porfolio that I have learnt in Semester-7 and using R programming language
+- We can clone or download it and run the code/R-Notebook in RStudio
 
 ## Table Contents
 
