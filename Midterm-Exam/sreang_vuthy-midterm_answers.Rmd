@@ -1,0 +1,220 @@
+---
+title: "R Notebook"
+output: html_notebook
+Date: 1/8/2021
+Author: "SREANG VUTHY"
+---
+
+### 1. Write a R code to Generate 6X6 matrix (A) using the random numbers between 1 to 100 and generate another 6x6 matrix (B) using random numbers between 500 to 600.
+a. Find the range of matrices A and B.
+b. Find the max value from each row of the matrices A and B.
+c. Find the diagonal values of matrices A and B.
+d. Multiply matrices A and B
+e. Replace the 4th row of Matrix A with diagonal values of matrix B
+f. Multiply matrices A and B and store the values on X.
+g. Divide the matrix A with matrix B.
+
+```{r}
+# 1. create matrix A and B
+a <- sample(1:100)
+b <- sample(500:600)
+A <- matrix(a, nrow = 6, ncol = 6)
+B <- matrix(b, nrow = 6, ncol = 6)
+A
+B
+
+# a. Find the range of matrices A and B
+range_a <- range(A)
+range_b <- range(B)
+range_a
+range_b
+
+# b. Find the max value from each row of the matrices A and B
+install.packages("matrixStats")
+library(matrixStats)
+max_a <- rowMaxs(A, na.rm = TRUE)
+max_b <- rowMaxs(B, na.rm = TRUE)
+max_a
+max_b
+
+# c. Find the diagonal values of matrices A and B
+diag_a <- diag(A)
+diag_b <- diag(B)
+diag_a
+diag_b
+
+# d. Multiply matrices A and B
+multiply_ab <- A %*% B
+multiply_ab
+
+# e. Replace the 4th row of Matrix A with diagonal values of matrix B
+rep_a <- rep(A, diag_b)
+rep_a
+
+# f. Multiply matrices A and B and store the values on X
+X <- A %*% B
+X
+
+# g. Divide the matrix A with matrix B
+divid_ab <- A/B
+divid_ab
+```
+
+
+### 2. Create a table using dataframe/tibble with the following categories(a to f) (10 marks)
+
+a. First name,
+b. Second Name,
+c. Age,
+d. Occupation,
+e. Place,
+f. Random numbers( between 1 to 10)
+
+And input at least 10 samples(observation) and do the following
+
+g. Extract the last column (f)
+h. Find the sum, mean and length of the extracted column
+
+```{r}
+# a to f: create dataframe
+a <- c("Vuthy", "Samnang", "Ratanak", "Channy", "David", "Zevo", "Sokmeng", "Moonlight", "Kimteng", "Dara")
+b <- c("Sreang", "Set", "Seng", "Pong", "Kat", "Thy", "Pech", "Kim", "Chy", "Kruy")
+c <- c(21, 21, 20, 23, 21, 34, 23, 22, 20, 24)
+d <- c("Student", "Student", "Student", "Student", "Student", "Progammer", "Teacher", "Engineer", "Student", "Student")
+e <- c("Speu", "Takeo", "Phnom Penh", "Kompong Cham", "Svay Rieng", "Takeo", "Batombong", "Kompong Cham", "Svay Rieng","Takeo")
+f <- c(1,2,3,4,5,6,7,8,9,10)
+my_data_frame <- data.frame(First_Name = a, Second_Name = b, Age = c, Occupation = d, Place = e, Random_Number = f)
+my_data_frame
+
+# g. extract the last column (f)
+extracted_column <- my_data_frame$Random_Number
+extracted_column
+
+# Find the sum, mean and length of the extracted column
+sum_ex <- sum(extracted_column)
+sum_ex
+
+mean_ex <- mean(extracted_column)
+mean_ex
+
+length_ex <- length(extracted_column)
+length_ex
+
+```
+
+### 3. Create a .txt file (Minimum : 150 words) with the latest news (In English) in cambodia from the official news agency’s website(Note: Include the reference link) and do the following
+
+a. Read the .txt file
+b. Perform the Tokenization and count the words
+c. Identify the most repeated word and replace that word with “KIT”
+d. Perform the Sentiment analysis
+e. Plot the graph between “words count” and “words” using geom_col()
+
+e.1. X-axis title =“Number of words”, Size=10, Bold, Text in Blue color,
+Center, space between graph and title = 20.
+
+e.2. Y-axis title =“List of words”, Size=10, Bold, Text in Red color,
+Center, space between graph and title = 20.
+e.3. Graph title =”Text Mining using R”,Size = 25, Bold, Center, Text in
+Yellow color, space between graph and title = 25.
+
+```{r}
+library(tokenizers)
+# a
+my_data <- read.delim("News.txt")
+
+# b
+words_data <- paste0(my_data)
+tokens <- tokenize_words(words_data)
+count <- count_words(words_data)
+count
+
+# c
+most_words <- names(table(tokens))[as.vector(table(tokens))==max(table(tokens))]
+most_words_count <- max(table(tokens))
+subs <- gsub("oil", "KIT", tokens)
+most_words
+most_words_count
+subs
+
+# d
+library("syuzhet")
+library("ggplot2")
+sentiment_analysis <- get_sentiment(tokens, method="syuzhet")
+summary(sentiment_analysis)
+# e
+
+
+```
+
+
+
+### 4. Find the assigned Dataset from the list below and perform the following (20 Marks)
+a. Import and Clean the dataset.
+b. Find the x and y variables(axis) from the assigned dataset and give the reason for
+selecting the x and y axis.
+c. Plot the graph using geom_col() and perform the linear model in statistics.
+d. Perform the facet with the available columns(Choose the any two variables from the
+columns)
+e. Use the theme layer to do the following (Note: Based on dataset, name the x and y axis &amp;
+graph)
+e.1. x-axis title =“________”, Size=10, Bold, Text in Green color, Center, space
+between graph and title = 20.
+e.2. y-axis title =“________”, Size=10, Bold, Text in Yellow color, Center, space
+between graph and title = 20.
+e.3. Graph title =”_________”,Size = 25, Bold, Center, Text in Blue color, space
+between graph and title = 25.
+
+Dataset Links: "https://github.com/fivethirtyeight/data/blob/master/media-mentions-
+2020/cable_weekly.csv"
+
+*NOTE: I have download that dataset in my computer then I import it through below path(In my computer)
+
+```{r}
+# a. Import and Clean the dataset.
+library("tidyverse")
+dataset <- read_csv("/Users/VUTHY/Downloads/cable_weekly.csv")
+dataset
+
+#is.na(dataset)
+# the dataset is already clean there is no NA so no need to clean again.
+
+# b. Find the x and y variables(axis) from the assigned dataset and give the reason for
+# selecting name as X and total_clips as Y because it would be easy to view name in X and total_clips in Y to easy to understand which name with the total_clips in graph.
+plot <- ggplot(dataset, aes(x=name, y=total_clips)) + 
+    xlab("Name") +
+    ylab("Total_Clips")
+
+# c. Plot the graph using geom_col() and perform the linear model in statistics.
+# using geom_col
+plot <- plot+geom_col()
+
+#perform linear model in smooting
+plot <- plot+geom_smooth(method="lm")
+plot
+
+# d. Perform the facet with the available columns(Choose the any two variables from the columns)
+# use facet with 2 variable by the total_clips and date
+plot+facet_grid(total_clips ~ date)
+
+# use facet with 1 variable by the matched_clips
+plot <- plot+facet_wrap(~total_clips)
+plot
+# because it diffcult to view 2 variable so choose only 1 variable
+
+# e. Use the theme layer to do the following (Note: Based on dataset, name the x and y axis graph)
+#e.1. x-axis title =“________”, Size=10, Bold, Text in Green color, Center, space between graph and title = 20.
+#e.2. y-axis title =“________”, Size=10, Bold, Text in Yellow color, Center, space between graph and title = 20.
+#e.3. Graph title =”_________”,Size = 25, Bold, Center, Text in Blue color, space between graph and title = 25.
+plot <- plot +
+  ggtitle("Cable Weekly in 2020") + theme(
+  axis.title.x=element_text(size=10, color="green", face="bold", margin=margin(t=20,r=20,b=0,l=0)),
+  axis.title.y=element_text(size=10, color="yellow", face="bold", margin=margin(t=0,r=20,b=0,l=20)),
+  plot.title=element_text(size=25, color="blue", face="bold", margin=margin(t=25,r=0,b=25,l=0))
+  )
+plot
+
+ggsave(filename="cable_weeklyGraph.png", units="cm", width=25, height=25)
+
+```
+
