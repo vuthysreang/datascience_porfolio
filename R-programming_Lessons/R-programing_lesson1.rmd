@@ -1,0 +1,389 @@
+---
+title: "R Notebook - Unit1"
+output: html_notebook
+---
+
+## R Language
+R was created by Ross Ihaka and Robert Gentleman on the Auckland university of New Zealand.
+R is a programming language, and developing environment used for statistic computing, graphic and processing/ analyzing data during data mining process (clean, analyze and graph your data).
+
+
+## Basic R
+```{r}
+# set working directory
+setwd(dir = "C:/Users/VUTHY/Documents/R")
+
+# get working directory
+getwd()
+```
+# Data types and variables 
+- objects are variables while class is their type
+- auto defined class by the value assigned to the object
+- value assignment : <- or =
+- objects (variables) : '_', '.', starts with alphabets, special char not allowed and assigned values at the time of declaration
+
+### Basic Atomic object class
+* Character (ex: 'Data')
+* Numeric (ex: 1,3,5.67,34)
+* Integer (ex: 10L,4L,4L)
+* Complex (ex: 3+1i)
+* Logical - True/False (ex: True, False, NA)
+
+```{r}
+# get user input
+age = as.integer(readline(prompt = "Input your age: "))
+
+# output
+print(age)
+```
+### Data Structure
+* Homogeneous : all elements are of the same data type(class) -> Vector, Matrix, Array
+* Heterogeneous: Elements can be of more than one data type(class) List, DataFrame
+
+```{r}
+# Vector : indexed starting at 1, 
+vec_1 = c(1: 5)
+vec_1
+vec_2 = c(1, 2, 3, 4, 5)
+vec_2
+
+# Sequence
+seq = seq(from=1, to=10, by=0.5)
+seq
+# Repeat
+rep = rep("xxxx",3)
+rep
+```
+
+```{r}
+# Subset
+x = c(1:5)
+x
+x
+sub_x = x[1:3]
+sub_x
+
+# Inner Product
+inner_x = x %*% x
+inner_x
+# inner_x
+
+# Outer Product
+outer_x = x %o% x
+outer_x
+```
+# List 
+list is a set of objects which might belong to another class 
+```{r}
+x<-list("KIT", NA, 1, 3.5)
+x[3]
+test_list = list( a = c(1, 2, 3, 4), b = TRUE, c ="Hello")
+test_list
+test_list$a
+test_list[3]
+```
+
+# matrix is a collection of multiple vectors
+```{r}
+# Matrix
+matrix1<- 1:15
+matrix1
+
+# set dimension of matrix
+dim(matrix1) = c(3, 5)
+matrix1
+dim(matrix1)
+
+# using matrix function
+row_col = 1:9
+matrix2 = matrix(row_col, 3, 3, byrow = FALSE)
+matrix2
+
+# using rbind
+row1 = 1:10
+row2 = 10:21
+matrix3 = rbind(row1, row2)
+matrix3
+# using cbind
+col1 = 1:10
+col2 = 11:20
+matrix4 = cbind(col1, col2)
+matrix4
+```
+
+```{r}
+# Matrix Calculation
+a<- 1:9
+b<- 2:10
+x<-matrix(a,3,3,byrow=TRUE)
+y<-matrix(b,3,3,byrow=TRUE)
+x
+y
+# Matrix multiplication
+x %*% y
+
+x*x
+
+# Matrix Inverse
+#solve(y)
+library(MASS)
+print(ginv(y))
+
+print("-----")
+# Transpose
+t(x)
+
+print("-----")
+# Diagonal
+diag(x)
+
+print("-----")
+diag(3,3,3)
+
+print("-----")
+diag(1:4)
+
+print("-----")
+eigen(x)
+
+```
+# Data Frames are used to store data in a table format
+ - each column can only contain objects of the same class
+```{r}
+# DataFrame
+m<-c("Kimseng", "Ratana", "Phanith")
+l<-c(23,24,25)
+q<-c(158,160,171)
+exm<-data.frame(name=m, age=l, height=q)
+exm
+```
+# Data import
+
+- read.table, read.csv
+- reads SPSS, Stata and SAS files(tidyverse)
+- readxl reads excel files(both .xls and .xlsx)
+```{r}
+install.packages("tidyverse")
+library(tidyverse)
+a = read_csv("C:/Users/VUTHY/Downloads/us_counties_covid19_daily.csv")
+a
+```
+# Data Export 
+```{r}
+install.packages("xlsx")
+library(rJava)
+library(xlsx)
+# library(readr)
+write_csv(exm, "C:/Users/VUTHY/Downloads/covidtest.csv", append=FALSE)
+write.xlsx(exm, "C:/Users/VUTHY/Downloads/covidtest1.xlsx", append=FALSE, sheetName="C:/Users/VUTHY/Downloads/covidtest1.xlsx")
+```
+
+# Control Structure 
+- conditional statements : if/else, elseif, ifelse()
+  if(){
+  
+  }else{
+  
+  }
+  ifelse(---, 1(yes), 0(no))
+- Loops: for, repeat(endless loop), while
+  for (object in vector) {
+  
+  }
+  repeat{
+    if(){
+      break
+    }
+  }
+  while(){
+  
+  }
+- Functions are defined, using keyword function
+  name<- function(a, b, ...){
+  
+  }
+```{r}
+# if/else
+num = 6
+if(num == 6){
+  print("YES")
+}else{
+  print("NO")
+}
+
+#ifelse
+ifelse(num == 6, "YES", "NO")
+```
+  
+  
+
+# Data Manipulation and Visualization
+
+* Data manipulation is the changing of data to make it easier to understand or be more organized, to display information to users in a more meaningful way; (Data Wrangling or cleaning)
+* Learn how to explore, filter, reorganize and process your data;
+* Most of the datasets are not  clean and tidy so we need to prepare the datasets before performing the statistical analysis
+* Rules for Data Tidy:
+  * Variable - Own column
+  * Observation - Own Row
+  * Variable - Own cells
+* ***dplyr*** is a package that makes data manipulation easy; It consists of five main verbs: 
+  * filter() 
+  * arrange()
+  * select()
+  * mutate()
+  * summarise()
+  * group_by()
+
+### Subset
+* Check the observations(Row) and variables(column)
+  * ncol(tablename)
+  * nrow(tablename)
+  * dim(tablename)
+* To keep first few and last observations
+  * head(tablename, n=5)
+  * tail(tablename,n=5)
+* Random sample of observations
+  * sample_n(tablename,n, replace=FALSE)
+* select observations & variables
+  * table_name[c(3:5), ]  (or) table_name[ , c(3:5)] 
+* Remove observation
+  * table_name[-c(2:4), ]  (or) table_name[ , -c(2:4)]
+* based on variables
+  * table_name$variables
+```{r}
+x <- ggplot2::diamonds
+x
+names(x)
+help(x)
+ncol(x)
+nrow(x)
+dim(x)
+head(x, n=5)
+tail(x, n=5)
+#sample_n(x,5, replace=FALSE)
+x[c(3:5,15,18), 4]
+x[3,4]
+x[c(3:5),]
+x[,c(3:5)]
+#remove
+x[-c(3:5),]
+x[,-c(3:5)]
+x$cut
+```
+# Missing Values 
+- Missing values (NA - "Not Applicable") are often problematic for many analyses
+- mean of a series or variable with at least one NA will give a NA
+
+```{r}
+is.na(x)  #check missing value
+which(is.na(x)) #return the position of missing values(by cell)
+apply(is.na(x), 2, which)  #get the positions of each column in your data set
+na.omit(x)  #delete the observation
+h<-mean(x$carat, na.rm = TRUE)
+g<-impute(x)  #instead of removing, replace by some values such as the median of the variable
+```
+- filter is a function that filter out rows that meet certains conditions
+- arrage : sorting data frames 
+- select : select the variables 
+- mutate : manipulating and creating variable (column)
+- transmute : will return only the column that u have manipulated
+  . rank(), min_rank(), dense_rank(), percent_rank() to rank
+  . log(), long10(), to take log of a variable
+  . cumsum(), cummean()
+  . row_number() if u need to create row numbers
+  . lead(), lag()
+- summarise() or summarize() : summarizing data (mutation)
+- group_by() : entire dataset to operating on it group-by-group
+- rename() : rename the variable
+
+```{r}
+m<-filter(x, price > 10000)
+m
+q<-arrange(x, desc(cut))
+q
+f<-dplyr::select(x, price, color)
+f
+h<-dplyr::select(x, cut, starts_with("a"), ends_with("b"), contains("h"), matches("j"))
+h
+k<-mutate(x, kkkk=cut)
+k
+t<-transmute(x, kkkk=price)
+t
+s<-summarise(x, f=log(price), g=mean(color))
+s
+g<-group_by(x, price)
+g
+uuu<-rename(x, xxxx=cut)
+uuu
+```
+
+```{r}
+x %>% filter(price < 400)  %>%  group_by(price) %>% summarise( mea = mean(price, na.rm = T))
+```
+
+# Visualization
+1. Data : our datasets
+2. Aesthetics : Axes, plot, positions, encodings?
+  - variable mapping like aes(x=var1, y=var2, color="red")
+3. Scale : scale values, represent multiple values?
+  - scale_x_continuous(limits=c(0,5)) +
+  scale_y_continuous(limits=c(0.20))
+4. Geometric objects : line, bar, points?
+  - type of plot 
+    0 dimensions - point, text
+    1 dimensions - path, line
+    2 dimensions - polygon, interval
+  Ex: ggplot(...) + geom_point()
+  for bar_chart : geom_bar(stat="identity", position="dodge") (to avoid overlap)
+5. statistics : mean, quantitile, confidence intervals?
+  - transform the data, generally by summarizing the info
+  - a stat is a func that takes in a dataset as the input and return output 
+  - stat can add new var to the original dataset, or create an entirely new dataset
+  Ex: geom_smooth(method="lm")
+6. facets : create subplots based on multiple dimensions
+  - can be used to split the data up into subsets of the entre dataset
+  - describes which variables should be used to split up the data and how they should be arranged
+  ex: ggtitle("title"), xlab("title"), ylab("title")
+  facet_wrap(~variable) - subplot into column
+  facet_grid() - subplots to row and column 
+7. coordinate system : cartesian, polar?
+  - map the position of objects onto the plane of the plot and controls how the axes and grid lines are drawn 
+  Ex: coord_catesian()
+
+***save: ggsave(filename="nyrattsart.png", units="cm", width=25, height=25)
+
+```{r}
+#tidy dataset 
+data<-ggplot2::diamonds
+data
+```
+```{r}
+#optional: scale, default grph: cartesian_coor
+#graph aes, geom
+ggplot(data, aes(x=carat, y=price, color=clarity)) +
+#geometry
+    geom_point(size=3, alpha = 1/3) +
+#scale
+    scale_x_continuous(breaks=seq(0.5, 0.5)) +
+    scale_y_continuous(breaks=seq(0,18000,1000)) +
+#coordinate system
+    coord_polar() +
+#give title
+    xlab("weight of the diamonds") +
+    ylab("price of diamonds") +
+    ggtitle("price of over 50,000 round cut diamonds") +
+#statitic
+    geom_smooth(method="lm") +
+#facet - subplotting (make to small small plot instead of previous plot): specific value and need to understand the column
+    facet_grid(cut ~ color) +
+#extra
+#theme layer : change the theme of graph (want to change to black and white for more clean or sth)
+    theme_bw() +
+#increate the size and make to bold ...
+    theme(axis.title.x=element_text(size=15, color="blue", face="bold", margin=margin(t=20,r=20,b=0,l=0)),
+          axis.title.y=element_text(size=15, color="red", face="bold", margin=margin(t=0,r=20,b=0,l=20)),
+          plot.title=element_text(size=15, color="green", face="bold", margin=margin(t=20,r=0,b=20,l=0)),
+#box color
+          strip.background=element_rect(color="yellow", fill="pink"))
+```
+

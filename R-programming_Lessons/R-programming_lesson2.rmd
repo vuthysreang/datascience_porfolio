@@ -1,0 +1,203 @@
+---
+title: "R Notebook - Unit2"
+output: html_notebook
+---
+# Intro
+- Data science is the art and science of acquiring knowledge through data. it's the practice of using computational methods to derive valuable and actionable insights from raw datasets. then use that knowledge to do the following:
+  1. make decisions
+  2. predict the future
+  3. understand the past/present
+  4. create new industries/product
+  + skills:
+  1. Hacking skills: programming complicated algorithms using computer languages.
+  2. Math and Statistics knowledge: to theorize and evaluate algorithms and change the existing procedures to fit situtations
+  3. Substantive expertise(domain expertise): allows you to apply concepts and results in a meaningful and effective way.
+  
+- Data engineering is an engineering domain that's dedicated to overcoming data-processing and data-handlings for applications that utilize large volumes, varieties and velocities of data
+
+- Data :refer to collection of info:
+  1. Organized data(structured data): data that is sorted into a row/column structure, where row represents a single observation and columns represent the characteristics of that observation.
+  2. Unorganized data(unstructured data): data that is in the free form, usually text or raw audio/singals that must be parsed further to ebcome organized
+  3. semi-structured data : data that doesn't fit into a structured database system, but is nonetheless structured by tags that are useful for creating form of order and hierarchy in the data
+
+#### Data Science Life Cycle
+1. Define Problem Statement, (should not be more than 3 lines)
+  - Reason for this project(why?)
+  - Research questions (Atleast 5)
+  - Challenges
+  - Solution
+2. Data Collections : data-> statistics-> information
+3. Data Quality Check,
+4. Exploratory Data Analysis,
+5. Data Modeling, 
+6. Data Communication
+import->tidy->transform->visualize, model->communicate
+
+### Data Scientist's Daily Task
+Ask questions to frame the business problems -> Get relevant data for analysis of problem -> explor data to make error corrections -> model data for in-depth analysis -> commnucate resulth of analysis -> 
+
+### Sources of data
+1. Published Data 
+  - The use of published data is often preferred due to its convenience, relatively low cost, and reliability
+  - Primary Data : Data published by the same organization that collected them are called primary data
+  - Secondary data : Refers to data that are published by an organization different from the one that originally collected and published the data
+2. Data collected from obervational studies and experimental studies 
+  - If relevant data are not available from published sources,  it may be necessary to generate the data by conducting a study
+  - This will especially be the case when data are needed concerning a specific company or situation
+  *** observational study : conducted to observe and record the data without attempting to control any of the factors that might influence.
+  *** Experimental studies : controlled factors that might influence, make it easier to establish a cause and effect relationship between two variables 
+  
+### Surveys
+  - Survey solicits information from people.
+  - The response rate (propotion of all prople comploete the survey) is key survey parameter.
+
+### Data Collections Methods:
+  - Personal Interview : advantage of having higher expected response rate than other methods
+  - Telephone Interview ; less expensive but it's alos less personal and has a lower expected response rate
+  - Self-Administered Questionnaire : relatively inexpensive method of conducting a survey and attractive when the number of people to be surveyed is large, it has a low response and high number of incorrect responses due to some misunderstnading questions.
+  *** Questionnaire Design :
+  - keep the question as short as possible 
+  - simple and clearly 
+  - start demographic to help respondents get started comfortably
+  - use yes|no and multiple choice 
+  - use open-ended questions
+  - avoid using leading-questions
+  - pretest questionnaire with small number of people
+  - when preparing the questions, think how you intend to tabulate and analyze from the response 
+  
+### Sampling
+  - Examining a sample rather than a population is cost 
+    Ex: TRP : advertisers, content providers and broadcasters 
+  - Target population : the population about which we want to draw inferences 
+  - Sampled population : the actual population from which the sample has been taken
+  *** Sampling plans : sample size we need to decide what size of sample to use
+  - Random sampling 
+    . Simple random sampling : randomly pick the samples from the population
+    . Stratified random sampling : separating the population into mutually exclusive sets or strata and then drawing simple random sample for each stratum 
+    Ex: sex (male, female), Age (user 20, 20-30, 31-40, 41-50, etc.)
+    . Clustered random sampling : is a simple random sample of groups or clusters of elements
+  - Not Random sampling
+    . Volunteer : 
+    . Convenience :
+  *** Sampling error 
+  - is an error that we expect to occur when make a statement about a population that is based only on the observations contained in a sample taken from the population
+  *** Non sampling error :
+  - Errors in data acquisition : because of faulty equipment, mistakes made during transcription from primary sources 
+  - Nonresponse error : refers to error introduced when responses are not obtained from some members of the sample.
+  
+### Type of Data
+1. Structured vs Unstructured data (organized vs unorganized)
+  - Structured (organized) data : this's data that can be thought of as observations and characteristics. it's usually organized using a table method (rows and columns)
+  - Unstructured (unorganized) data : this data exists as a free entity and doesn't follow any standard organization hierarchy
+  *** Preprocessing : in order to apply structure to at least a part of the data further analysis.
+  Ex: replace the string or char in a vector or a data frame using the sub(), gsub() and grepl()
+  
+```{r}
+unstructure_data <- "In Originals he again addresses the challenge of improving the world, but now from the perspective of becoming original: choosing to champion novel ideas and values that go against the grain, battle conformity, and buck outdated traditions. How can we originate new ideas, policies, and practices all without all risking it all he?"
+
+replace_sub <- sub("he", "she", unstructure_data) # use gsub for multiple replacement
+replace_sub
+replace_gsub <- gsub("he", "she", unstructure_data)
+replace_gsub
+#for search keywords
+replace_grepl <- grepl("all", unstructure_data, ignore.case = T)
+replace_grepl
+keyword <- c("battle")
+search_result <- grepl(keyword, unstructure_data, ignore.case = T)
+search_result
+```
+  *** Text Mining : (change the unstructure to structure)
+  - in order to turn unstructure dataset(text) into tidy text dataset, we first need to put it into a sata frame
+  - one-token-per-row
+  - Tokenization : we need to both break the test into individual tokens and transform it to a tidy data structure using unnest_toekns(file, output, input) function
+
+```{r}
+library(tidytext) # for tokenization
+library(ggplot2) # for graph visualization
+library(dplyr)
+
+# 1. create table
+dataset <- data.frame(S.No=1, Text=unstructure_data)
+
+# 5. alternative pipe operator %>%
+# tokenization the data
+# count the Info column
+# n get from count(info)
+dataset %>% 
+  unnest_tokens(Info, Text) %>%
+  count(Info, sort=TRUE) %>% 
+  ggplot(aes(n, Info)) + geom_col() # plot the graph using ggplot2
+
+```
+  *** Sentiment Analysis
+  - When human readers approach a text, we use our understanding of the emotional intent of words to infer whether a section of text is positive or negative, etc.,
+  - We can use the tools of text mining to approach the emotional content of text programmatically.
+  
+```{r}
+library(sentimentr)
+
+m<-c("Kimseng skee kske eksekej", "Ratana sejasj ejs ej and ad all this", "Phanith dek isie. ejejs. eejjs sjjeje is the best part of me. so if you are the bad ass person just get out of my fucking h.")
+l<-c(23,24,25)
+q<-c(158,160,171)
+exm<-data.frame(name=m, age=l, height=q)
+exm
+result1<- sentiment(exm$name) # To know number of sentences and words(Sentiment at the sentence level)
+result1
+result2 <-sentiment_by(exm$name) # Total number of words
+result2
+result3<- get_sentences(exm) # To display the sentences
+result3
+result4<- emotion(exm$name) # Emotion at the sentence level
+result4
+result5<- emotion_by(exm$name) # Aggregated emotion by group(s)
+result5
+result6<- profanity(exm$name) # Profanity at the sentence level
+result6
+result7<- profanity_by(exm$name) # Aggregated profanity by group(s)
+result7
+```
+  
+2. Quantitative vs Qualitative data
+  - Quantitative data : data can be described using numbers and basic math procedures, including addition are possible on the set.((algematrix process) all about numbers, based on numbers, list down one by one)
+    * Discrete data :data that is counted, Ex: decimals like 1, 2 ....
+    * Continuous data : data that is measured, Ex: points value like 1.0223, ...
+  - Qualitative data : data can't be described using numbers and basic math. this data is generally thought of as being described using "natural" categories and language. (no prototype or output or not give any products (students name or sth))
+
+3. The four levels of data
+- The nominal level : use keyword to collect
+    . described by name or category, 
+    . can't perfrom quatitative math operation such as addition or division, only for qualitative 
+    . classification the letters, words or numbers
+    . not required to be in order
+    
+  Ex: 1/Yes, 0/No
+  - The ordinal level :
+    . provides rank order or the means to place one observation before the other
+    .order the observations from first to last, we can't add or subtract them to get any real meaning
+    . need to be in order
+  
+  Ex: likert scale (1=strongly agree, 2=agree, 3= disagree, 4= strongly disagree)
+  - The interval level :
+    . the diff from the ordinal and interval level is just that difference 
+    . allow the substraction between data points
+    . addition and substraction allowd, can't multiple or divide 
+    . it has no 'true zero'
+    
+  Ex: 
+  - If it is 100 degrees Fahrenheit in Texas and 80 degrees Fahrenheit in Istanbul, Turkey, then Texas is 20 degrees warmer than Istanbul
+  - The ordinal level(1 to 5 survey), remember that the difference between the scores (when you subtract them) does not make sense, therefore, this data cannot be called at the interval level
+
+  - The ratio level : 
+    . same as the interval level
+    . allow us to multiply and divide as well
+    . it has a 'true zero'
+*** nominal and ordinal belong to qualitative and the other two belong to quantitative ***
+
+
+### Five steps to perform data science are as follows :
+1. Asking the interesting question
+2. Obtaining the data : from user
+3. Exploring the data : clean data or sth else
+4. Modeling the data : choose modeling
+5. Communicating and Visualizing the result : remove variable or sth in communicating and then visualizing
+
